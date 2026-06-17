@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Square, Mic, Send, ArrowRight, Award, ShieldAlert, Sparkles, MessageSquare, Code } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = 'https://ai-interviewer-backend-lk0k.onrender.com';
 
 interface InterviewSessionProps {
   token: string;
@@ -41,6 +41,52 @@ const isCodingRole = (roleName: string) => {
          lower.includes('science') ||
          lower.includes('analyst');
 };
+
+// Helper to clean and strip JSON wrappers or numbering from question text
+function cleanQuestionText(text: string): string {
+  if (!text) return '';
+  let clean = text.trim();
+  
+  function extractStringValue(obj: any): string | null {
+    if (!obj) return null;
+    if (typeof obj === 'string') return obj;
+    if (typeof obj === 'object') {
+      if (obj.question && typeof obj.question === 'string') return obj.question;
+      if (obj.question_text && typeof obj.question_text === 'string') return obj.question_text;
+      if (obj.text && typeof obj.text === 'string') return obj.text;
+      if (obj.description && typeof obj.description === 'string') return obj.description;
+      
+      const vals = Object.values(obj);
+      for (const val of vals) {
+        const found = extractStringValue(val);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  if (clean.startsWith('{') && clean.endsWith('}')) {
+    try {
+      const parsed = JSON.parse(clean);
+      if (parsed && (parsed.title || parsed.description || parsed.templates)) {
+        return text; // Preserve coding question JSON format as-is
+      }
+      const extracted = extractStringValue(parsed);
+      if (extracted) {
+        clean = extracted.trim();
+      }
+    } catch (e) {
+      const match = clean.match(/^\{\s*["']?[a-zA-Z0-9_-]+["']?\s*:\s*["']([\s\S]*?)["']\s*\}$/);
+      if (match) {
+        clean = match[1].trim();
+      }
+    }
+  }
+
+  // Also remove any leading numbering like "1. ", "q1: ", "q2. ", "(1) ", "1) ", etc.
+  clean = clean.replace(/^(?:q?\d+[\.\):\-\s]+)+/i, '');
+  return clean.trim();
+}
 
 export const InterviewSession: React.FC<InterviewSessionProps> = ({
   token,
@@ -436,7 +482,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                   Interviewer:
                 </p>
                 <p className="text-lg font-semibold text-slate-200 leading-relaxed">
-                  {questions[currentQIdx]?.question_text}
+                  {cleanQuestionText(questions[currentQIdx]?.question_text || '')}
                 </p>
               </div>
 
@@ -640,7 +686,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                   Technical Question:
                 </p>
                 <p className="text-lg font-semibold text-slate-200 leading-relaxed">
-                  {questions[currentQIdx]?.question_text}
+                  {cleanQuestionText(questions[currentQIdx]?.question_text || '')}
                 </p>
               </div>
 

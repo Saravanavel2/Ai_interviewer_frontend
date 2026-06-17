@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = 'https://ai-interviewer-backend-lk0k.onrender.com';
 
 interface FinalReportProps {
   token: string;
@@ -26,6 +26,52 @@ function parseFeedback(raw: string) {
     strong: strongMatch ? strongMatch[1].trim() : '',
     weak:   weakMatch   ? weakMatch[1].trim()   : ''
   };
+}
+
+// Helper to clean and strip JSON wrappers or numbering from question text
+function cleanQuestionText(text: string): string {
+  if (!text) return '';
+  let clean = text.trim();
+  
+  function extractStringValue(obj: any): string | null {
+    if (!obj) return null;
+    if (typeof obj === 'string') return obj;
+    if (typeof obj === 'object') {
+      if (obj.question && typeof obj.question === 'string') return obj.question;
+      if (obj.question_text && typeof obj.question_text === 'string') return obj.question_text;
+      if (obj.text && typeof obj.text === 'string') return obj.text;
+      if (obj.description && typeof obj.description === 'string') return obj.description;
+      
+      const vals = Object.values(obj);
+      for (const val of vals) {
+        const found = extractStringValue(val);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  if (clean.startsWith('{') && clean.endsWith('}')) {
+    try {
+      const parsed = JSON.parse(clean);
+      if (parsed && (parsed.title || parsed.description || parsed.templates)) {
+        return text; // Preserve coding question JSON format as-is
+      }
+      const extracted = extractStringValue(parsed);
+      if (extracted) {
+        clean = extracted.trim();
+      }
+    } catch (e) {
+      const match = clean.match(/^\{\s*["']?[a-zA-Z0-9_-]+["']?\s*:\s*["']([\s\S]*?)["']\s*\}$/);
+      if (match) {
+        clean = match[1].trim();
+      }
+    }
+  }
+
+  // Also remove any leading numbering like "1. ", "q1: ", "q2. ", "(1) ", "1) ", etc.
+  clean = clean.replace(/^(?:q?\d+[\.\):\-\s]+)+/i, '');
+  return clean.trim();
 }
 
 /** Section icon map */
@@ -347,7 +393,7 @@ export const FinalReport: React.FC<FinalReportProps> = ({
                           </div>
                           <div className="bg-brand-500/5 border border-brand-500/15 rounded-xl p-4 space-y-3">
                             <p className="text-sm font-semibold text-white leading-relaxed">
-                              {practiceQna.question_text}
+                              {cleanQuestionText(practiceQna.question_text || '')}
                             </p>
                             {practiceQna.answer_text && (
                               <div className="border-t border-slate-800/50 pt-3 space-y-1">
@@ -427,7 +473,7 @@ export const FinalReport: React.FC<FinalReportProps> = ({
                           <div className="space-y-2">
                             {sectionQnaList.slice(1).map((q: any, qi: number) => (
                               <div key={qi} className="bg-slate-950/40 border border-slate-900 rounded-lg p-3 flex items-start justify-between gap-3">
-                                <p className="text-xs text-slate-400 leading-relaxed flex-1">{q.question_text}</p>
+                                <p className="text-xs text-slate-400 leading-relaxed flex-1">{cleanQuestionText(q.question_text || '')}</p>
                                 <span className={`text-xs font-bold flex-shrink-0 ${scoreColor(q.comm_overall || 0)}`}>
                                   {q.comm_overall || 0}/100
                                 </span>
@@ -465,7 +511,7 @@ export const FinalReport: React.FC<FinalReportProps> = ({
               </thead>
               <tbody>
                 {qnas.map((q: any, idx: number) => {
-                  let questionText = q.question_text;
+                  let questionText = cleanQuestionText(q.question_text || '');
                   if (q.is_technical === 2) {
                     try {
                       const parsed = JSON.parse(q.question_text);
