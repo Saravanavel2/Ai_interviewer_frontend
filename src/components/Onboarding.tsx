@@ -66,18 +66,18 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
 
   return (
     <div className="max-w-xl w-full mx-auto animate-slide-up">
-      <div className="glass-panel p-8 md:p-10 border border-slate-880/80">
+      <div className="glass-panel p-8 md:p-10 border border-slate-100">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-brand-500 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Let's Customize Your Prep
           </h2>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-slate-500">
             Tell us about your target role and company. We'll tailor the entire mock interview to their specific hiring bar.
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm">
             {error}
           </div>
         )}
@@ -85,7 +85,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-300 flex items-center gap-2">
+            <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
               <User size={16} className="text-brand-500" />
               Full Name (Optional)
             </label>
@@ -100,13 +100,13 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
 
           {/* Target Role */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-300 flex items-center gap-2">
+            <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
               <Briefcase size={16} className="text-brand-500" />
               Target Role
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <select
-                className="glass-input w-full bg-slate-900"
+                className="glass-input w-full bg-white text-slate-800"
                 value={role}
                 onChange={(e) => {
                   setRole(e.target.value);
@@ -136,13 +136,13 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
 
           {/* Target Company */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-300 flex items-center gap-2">
+            <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
               <Building size={16} className="text-brand-500" />
               Target Company
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <select
-                className="glass-input w-full bg-slate-900"
+                className="glass-input w-full bg-white text-slate-800"
                 value={company}
                 onChange={(e) => {
                   setCompany(e.target.value);

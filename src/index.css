@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,8 +6,8 @@
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100 font-sans antialiased overflow-x-hidden min-h-screen selection:bg-brand-600/30 selection:text-white;
-    font-family: 'Inter', sans-serif;
+    @apply bg-slate-50 text-slate-800 antialiased overflow-x-hidden min-h-screen selection:bg-brand-500/10 selection:text-brand-700;
+    font-family: 'Outfit', sans-serif;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -16,32 +16,33 @@
 }
 
 .bg-glow-radial {
-  background: radial-gradient(circle at 50% -20%, rgba(99, 102, 241, 0.15) 0%, rgba(15, 23, 42, 0) 70%),
-              radial-gradient(circle at 10% 80%, rgba(79, 70, 229, 0.05) 0%, rgba(15, 23, 42, 0) 50%);
+  background: radial-gradient(circle at 50% -20%, rgba(99, 102, 241, 0.08) 0%, rgba(248, 250, 252, 0) 70%),
+              radial-gradient(circle at 10% 80%, rgba(59, 130, 246, 0.05) 0%, rgba(248, 250, 252, 0) 50%),
+              #f8fafc;
 }
 
 .glass-panel {
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(79, 70, 229, 0.08);
+  box-shadow: 0 10px 40px -10px rgba(79, 70, 229, 0.06), 0 1px 3px rgba(79, 70, 229, 0.02);
+  border-radius: 1.25rem;
 }
 
 .glass-panel-hover {
-  @apply transition-all duration-300 hover:bg-slate-900/70 hover:border-slate-700/50 hover:shadow-indigo-500/5 hover:-translate-y-0.5;
+  @apply transition-all duration-300 hover:bg-white hover:border-brand-500/20 hover:shadow-lg hover:shadow-brand-500/5 hover:-translate-y-0.5;
 }
 
 .glass-input {
-  background: rgba(15, 23, 42, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(79, 70, 229, 0.15);
   border-radius: 0.75rem;
-  @apply px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 transition-all duration-200;
+  @apply px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-500/10 transition-all duration-200;
 }
 
 .glow-btn {
-  @apply relative overflow-hidden bg-brand-600 text-white font-medium px-6 py-3 rounded-xl shadow-lg hover:bg-brand-500 hover:shadow-brand-600/25 active:scale-95 transition-all duration-200;
+  @apply relative overflow-hidden bg-brand-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-md shadow-brand-600/15 hover:bg-brand-700 hover:shadow-lg hover:shadow-brand-600/25 active:scale-[0.98] transition-all duration-200;
 }
 
 /* Custom scrollbars */
@@ -51,14 +52,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(241, 245, 249, 0.5);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(79, 70, 229, 0.15);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(79, 70, 229, 0.25);
 }

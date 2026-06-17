@@ -83,25 +83,25 @@ function App() {
   };
 
   return (
-    <div className="bg-glow-radial min-h-screen text-slate-100 flex flex-col justify-between selection:bg-brand-600/30">
+    <div className="bg-glow-radial min-h-screen text-slate-800 flex flex-col justify-between selection:bg-brand-500/10 selection:text-brand-700">
       {/* Navbar */}
-      <header className="border-b border-slate-900 bg-slate-950/40 backdrop-blur-md sticky top-0 z-50">
+      <header className="border-b border-slate-100 bg-white/75 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="bg-gradient-to-tr from-brand-600 to-indigo-500 p-2 rounded-xl text-white shadow-lg shadow-brand-500/20">
               <GraduationCap size={22} />
             </div>
             <div>
-              <span className="font-extrabold text-xl tracking-tight text-white flex items-center gap-1">
+              <span className="font-extrabold text-xl tracking-tight text-slate-900 flex items-center gap-1">
                 PrepMate <span className="text-brand-500">AI</span>
               </span>
-              <p className="text-[10px] text-slate-500 font-semibold tracking-wider uppercase">Interview sandbox</p>
+              <p className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Interview sandbox</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
+          <div className="flex items-center gap-4 text-xs font-semibold text-slate-500">
             {userData && (
-              <div className="bg-slate-900 border border-slate-850 px-3 py-1.5 rounded-lg flex items-center gap-2">
+              <div className="bg-slate-100/60 border border-slate-200/80 px-3 py-1.5 rounded-lg flex items-center gap-2 text-slate-700">
                 <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                 <span>{userData.target_role} @ {userData.target_company}</span>
               </div>
@@ -114,8 +114,8 @@ function App() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-12 flex items-center justify-center">
         {loading ? (
           <div className="flex flex-col items-center justify-center space-y-4">
-            <div className="w-12 h-12 rounded-full border-4 border-slate-850 border-t-brand-500 animate-spin"></div>
-            <p className="text-slate-400 text-sm animate-pulse">Initializing connection...</p>
+            <div className="w-12 h-12 rounded-full border-4 border-slate-200 border-t-brand-500 animate-spin"></div>
+            <p className="text-slate-500 text-sm animate-pulse">Initializing connection...</p>
           </div>
         ) : (
           <>
@@ -165,7 +165,7 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950/20 py-6 text-center text-xs text-slate-600">
+      <footer className="border-t border-slate-100 bg-white/40 py-6 text-center text-xs text-slate-500">
         <p>© 2026 PrepMate AI. Highly Tailored Mock Interview Simulator. Built with React + FastAPI + Gemini.</p>
       </footer>
     </div>

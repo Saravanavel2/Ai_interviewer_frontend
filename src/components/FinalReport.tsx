@@ -180,24 +180,24 @@ export const FinalReport: React.FC<FinalReportProps> = ({
     <div className="max-w-5xl w-full mx-auto space-y-8 animate-slide-up print:bg-white print:text-black">
 
       {/* ── Banner ── */}
-      <div className="glass-panel p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div className="glass-panel p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-slate-100 shadow-sm">
         <div>
-          <span className="text-xs font-bold text-brand-500 uppercase tracking-widest bg-brand-500/10 px-3 py-1.5 rounded-full print:hidden">
+          <span className="text-xs font-bold text-brand-600 uppercase tracking-widest bg-brand-50 border border-brand-100 px-3 py-1.5 rounded-full print:hidden">
             Consolidated Feedback
           </span>
-          <h1 className="text-3xl font-extrabold text-white mt-3 print:text-black">
+          <h1 className="text-3xl font-extrabold text-slate-900 mt-3 print:text-black font-sans">
             PrepMate AI Prep Report
           </h1>
-          <p className="text-slate-400 text-sm mt-1">
-            Targeting <strong>{role}</strong> at <strong>{company}</strong>
+          <p className="text-slate-500 text-sm mt-2 font-normal leading-relaxed">
+            Targeting <strong className="text-slate-800">{role}</strong> at <strong className="text-slate-800">{company}</strong>
           </p>
         </div>
         <div className="flex gap-4 print:hidden">
           <button onClick={() => window.print()}
-            className="flex items-center gap-2 bg-slate-900 border border-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white px-5 py-3 rounded-xl transition-all">
+            className="flex items-center gap-2 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 hover:text-slate-800 px-5 py-3 rounded-xl transition-all font-semibold text-xs shadow-sm">
             <Printer size={16} /> Export PDF
           </button>
-          <button onClick={onRestart} className="glow-btn flex items-center gap-2">
+          <button onClick={onRestart} className="glow-btn flex items-center gap-2 text-xs">
             <RotateCcw size={16} /> New Prep
           </button>
         </div>
@@ -206,20 +206,20 @@ export const FinalReport: React.FC<FinalReportProps> = ({
       {/* ── Score Cards ── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-          { icon: <Award size={28} />, bg: 'bg-red-500/10 text-red-500',      label: 'Technical Readiness',  val: `${avgTech}%`,               sub: 'Average correctness', bar: avgTech,  color: 'bg-red-400' },
-          { icon: <TrendingUp size={28} />, bg: 'bg-emerald-500/10 text-emerald-500', label: 'Communication Score', val: `${avgComm}%`,  sub: 'Tone, structure & pacing', bar: avgComm, color: 'bg-emerald-400' },
-          { icon: <FileText size={28} />, bg: 'bg-indigo-500/10 text-indigo-500',    label: 'Sections Reviewed',   val: `${resumeSections.length}`, sub: 'Resume sections analysed', bar: resumeSections.length > 0 ? Math.round((optimized / resumeSections.length) * 100) : 0, color: 'bg-indigo-400' }
+          { icon: <Award size={28} />, bg: 'bg-red-50 text-red-650 border border-red-100',      label: 'Technical Readiness',  val: `${avgTech}%`,               sub: 'Average correctness', bar: avgTech,  color: 'bg-rose-500' },
+          { icon: <TrendingUp size={28} />, bg: 'bg-emerald-55 text-emerald-700 border border-emerald-100', label: 'Communication Score', val: `${avgComm}%`,  sub: 'Tone, structure & pacing', bar: avgComm, color: 'bg-emerald-500' },
+          { icon: <FileText size={28} />, bg: 'bg-indigo-50 text-indigo-750 border border-indigo-100',    label: 'Sections Reviewed',   val: `${resumeSections.length}`, sub: 'Resume sections analysed', bar: resumeSections.length > 0 ? Math.round((optimized / resumeSections.length) * 100) : 0, color: 'bg-indigo-500' }
         ].map((c, i) => (
-          <div key={i} className="glass-panel p-6 border border-slate-800/60 space-y-4">
+          <div key={i} className="glass-panel p-6 border-slate-100 shadow-sm space-y-4">
             <div className="flex items-center gap-4">
               <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${c.bg}`}>{c.icon}</div>
               <div>
-                <p className="text-xs text-slate-500 font-bold uppercase">{c.label}</p>
-                <p className="text-3xl font-extrabold text-white mt-1">{c.val}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{c.sub}</p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{c.label}</p>
+                <p className="text-3xl font-extrabold text-slate-850 mt-1 font-sans">{c.val}</p>
+                <p className="text-xs text-slate-500 mt-0.5 font-normal">{c.sub}</p>
               </div>
             </div>
-            <div className="bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-900">
+            <div className="bg-slate-100 rounded-full h-1.5 overflow-hidden border border-slate-200/50">
               <div className={`${c.color} h-full rounded-full transition-all duration-700`} style={{ width: `${c.bar}%` }} />
             </div>
           </div>
@@ -228,19 +228,19 @@ export const FinalReport: React.FC<FinalReportProps> = ({
 
       {/* ── Chart + AI Summary ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="glass-panel p-6 space-y-4">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <TrendingUp size={18} className="text-brand-500" /> Communication Score Trend
+        <div className="glass-panel p-6 space-y-4 border-slate-100 shadow-sm">
+          <h3 className="text-lg font-bold text-slate-850 flex items-center gap-2">
+            <TrendingUp size={18} className="text-brand-655" /> Communication Score Trend
           </h3>
           {chartPts.length > 0 ? (
             <div className="relative pt-2">
               <svg className="w-full h-44 overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
-                {[25, 50, 75].map(g => <line key={g} x1="0" y1={g} x2="100" y2={g} stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" />)}
+                {[25, 50, 75].map(g => <line key={g} x1="0" y1={g} x2="100" y2={g} stroke="rgba(0,0,0,0.06)" strokeWidth="0.5" />)}
                 {pathD && <path d={pathD} fill="none" stroke="url(#iGrad)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />}
                 {chartPts.map((p: any, i: number) => (
                   <g key={i}>
-                    <circle cx={p.x} cy={p.y} r="4.5" fill="#6366f1" stroke="#0f172a" strokeWidth="2" />
-                    <text x={p.x} y={p.y - 8} fill="#94a3b8" fontSize="6" fontWeight="bold" textAnchor="middle">{p.score}</text>
+                    <circle cx={p.x} cy={p.y} r="4.5" fill="#4f46e5" stroke="#ffffff" strokeWidth="2" />
+                    <text x={p.x} y={p.y - 8} fill="#64748b" fontSize="6" fontWeight="bold" textAnchor="middle">{p.score}</text>
                   </g>
                 ))}
                 <defs>
@@ -250,31 +250,31 @@ export const FinalReport: React.FC<FinalReportProps> = ({
                   </linearGradient>
                 </defs>
               </svg>
-              <div className="flex justify-between text-xs text-slate-500 mt-3 border-t border-slate-900 pt-2">
+              <div className="flex justify-between text-xs text-slate-500 mt-3 border-t border-slate-100 pt-2 font-medium">
                 <span>Session Start</span><span>Session End</span>
               </div>
             </div>
-          ) : <p className="text-slate-500 text-sm text-center py-10">No score data logged.</p>}
+          ) : <p className="text-slate-550 text-sm text-center py-10 font-normal">No score data logged.</p>}
         </div>
 
-        <div className="glass-panel p-6 flex flex-col space-y-4">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <Award size={18} className="text-red-500" /> AI Session Summary
+        <div className="glass-panel p-6 flex flex-col space-y-4 border-slate-100 shadow-sm">
+          <h3 className="text-lg font-bold text-slate-850 flex items-center gap-2">
+            <Award size={18} className="text-rose-650" /> AI Session Summary
           </h3>
-          <div className="flex-1 space-y-4 overflow-y-auto">
-            <div className="bg-slate-950/40 p-4 border border-indigo-500/10 rounded-xl space-y-2">
-              <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-wide flex items-center gap-1.5">
+          <div className="flex-1 space-y-4 overflow-y-auto pr-1">
+            <div className="bg-slate-5 p-4 border border-indigo-100/50 rounded-xl space-y-2">
+              <h4 className="text-xs font-bold text-indigo-755 uppercase tracking-wide flex items-center gap-1.5">
                 <BookOpen size={12} /> Resume Fit Critique
               </h4>
-              <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">
+              <p className="text-sm text-slate-600 leading-relaxed font-normal whitespace-pre-line">
                 {report?.resume_summary || 'No summary available.'}
               </p>
             </div>
-            <div className="bg-slate-950/40 p-4 border border-red-500/10 rounded-xl space-y-2">
-              <h4 className="text-xs font-bold text-red-400 uppercase tracking-wide flex items-center gap-1.5">
+            <div className="bg-slate-5 p-4 border border-rose-100/50 rounded-xl space-y-2">
+              <h4 className="text-xs font-bold text-rose-750 uppercase tracking-wide flex items-center gap-1.5">
                 <Target size={12} /> Technical Evaluation
               </h4>
-              <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">
+              <p className="text-sm text-slate-655 leading-relaxed font-normal whitespace-pre-line">
                 {report?.technical_summary || 'No technical summary available.'}
               </p>
             </div>
@@ -283,15 +283,15 @@ export const FinalReport: React.FC<FinalReportProps> = ({
       </div>
 
       {/* ── Prioritized Action Plan ── */}
-      <div className="glass-panel p-6 md:p-8 space-y-6">
-        <div className="flex items-center gap-3 border-b border-slate-800/60 pb-4">
-          <div className="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center text-brand-500">
+      <div className="glass-panel p-6 md:p-8 space-y-6 border-slate-100 shadow-sm">
+        <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div className="w-10 h-10 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600">
             <CheckCircle size={20} />
           </div>
           <div>
-            <h3 className="text-xl font-extrabold text-white">Prioritized Action Plan</h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Tailored for <strong className="text-slate-400">{role}</strong> at <strong className="text-slate-400">{company}</strong>
+            <h3 className="text-xl font-extrabold text-slate-900">Prioritized Action Plan</h3>
+            <p className="text-xs text-slate-500 mt-1 font-normal">
+              Tailored for <strong className="text-slate-700">{role}</strong> at <strong className="text-slate-700">{company}</strong>
             </p>
           </div>
         </div>
@@ -300,20 +300,20 @@ export const FinalReport: React.FC<FinalReportProps> = ({
             const s = PRIORITY_STYLES[plan.priority] || PRIORITY_STYLES.Medium;
             return (
               <div key={plan.id || idx}
-                className={`bg-slate-950/40 border border-slate-900 border-l-4 ${s.border} p-5 rounded-xl space-y-3 hover:bg-slate-950/60 transition-all`}>
+                className={`bg-slate-5 border border-slate-150 border-l-4 ${s.border} p-5 rounded-xl space-y-3 hover:bg-slate-100/50 hover:border-slate-200 transition-all shadow-sm`}>
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <div className={`w-2 h-2 rounded-full ${s.dot} mt-0.5 flex-shrink-0`} />
-                    <span className="text-xs font-bold text-slate-500">Action #{idx + 1}</span>
+                    <span className="text-xs font-bold text-slate-450">Action #{idx + 1}</span>
                   </div>
-                  <span className={`text-xs px-2.5 py-0.5 rounded-full border ${s.badge} flex-shrink-0`}>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full border ${s.badge} flex-shrink-0 font-bold uppercase tracking-wider`}>
                     {plan.priority} Priority
                   </span>
                 </div>
-                <p className="text-sm text-slate-200 leading-relaxed">{plan.recommendation}</p>
+                <p className="text-sm text-slate-600 leading-relaxed font-normal">{plan.recommendation}</p>
               </div>
             );
-          }) : <p className="text-slate-500 text-sm col-span-2">No action plan items generated.</p>}
+          }) : <p className="text-slate-500 text-sm col-span-2 font-normal">No action plan items generated.</p>}
         </div>
       </div>
 
@@ -321,11 +321,11 @@ export const FinalReport: React.FC<FinalReportProps> = ({
       {resumeSections?.length > 0 && (
         <div className="space-y-5">
           <div className="flex items-center gap-3 px-1">
-            <Sparkles size={22} className="text-indigo-400" />
+            <Sparkles size={22} className="text-indigo-650 animate-pulse" />
             <div>
-              <h3 className="text-xl font-extrabold text-white">Section-by-Section Review &amp; Suggestions</h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Targeted practice questions, strengths, and <strong className="text-slate-400">{company} · {role}</strong>-specific improvement tips per section
+              <h3 className="text-xl font-extrabold text-slate-900">Section-by-Section Review &amp; Suggestions</h3>
+              <p className="text-xs text-slate-500 mt-1 font-normal">
+                Targeted practice questions, strengths, and <strong className="text-slate-700">{company} · {role}</strong>-specific improvement tips per section
               </p>
             </div>
           </div>
@@ -346,21 +346,21 @@ export const FinalReport: React.FC<FinalReportProps> = ({
 
               // If no structured feedback, try the improved_version field as a proxy
               const isExpanded = expanded.has(idx);
-              const icon = SECTION_ICONS[section.section_type] || <FileText size={16} className="text-slate-400" />;
+              const icon = SECTION_ICONS[section.section_type] || <FileText size={16} className="text-slate-500" />;
 
               return (
-                <div key={idx} className="glass-panel border border-slate-800/60 rounded-2xl overflow-hidden">
+                <div key={idx} className="glass-panel border-slate-100 shadow-sm rounded-2xl overflow-hidden">
                   {/* Header */}
                   <button
                     onClick={() => toggle(idx)}
-                    className="w-full flex items-center justify-between p-5 hover:bg-slate-900/30 transition-colors text-left"
+                    className="w-full flex items-center justify-between p-5 hover:bg-slate-50/50 transition-colors text-left"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center">
+                      <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center">
                         {icon}
                       </div>
                       <div>
-                        <h4 className="text-sm font-extrabold text-white">{section.section_type}</h4>
+                        <h4 className="text-sm font-extrabold text-slate-900">{section.section_type}</h4>
                         <p className="text-xs text-slate-500">
                           {sectionQnaList.length > 0
                             ? `${sectionQnaList.length} question${sectionQnaList.length > 1 ? 's' : ''} answered`
@@ -380,24 +380,24 @@ export const FinalReport: React.FC<FinalReportProps> = ({
 
                   {/* Body */}
                   {isExpanded && (
-                    <div className="border-t border-slate-800/40 px-5 pb-6 pt-5 space-y-5">
+                    <div className="border-t border-slate-100 px-5 pb-6 pt-5 space-y-5">
 
                       {/* Practice Question */}
                       {practiceQna ? (
                         <div className="space-y-3">
                           <div className="flex items-center gap-2">
-                            <HelpCircle size={15} className="text-brand-500" />
-                            <span className="text-xs font-bold text-brand-400 uppercase tracking-wider">
+                            <HelpCircle size={15} className="text-brand-600" />
+                            <span className="text-xs font-bold text-brand-600 uppercase tracking-wider">
                               Practice Question — {company} · {role}
                             </span>
                           </div>
-                          <div className="bg-brand-500/5 border border-brand-500/15 rounded-xl p-4 space-y-3">
-                            <p className="text-sm font-semibold text-white leading-relaxed">
+                          <div className="bg-brand-5/30 border border-brand-100/50 rounded-xl p-4 space-y-3">
+                            <p className="text-sm font-semibold text-slate-700 leading-relaxed">
                               {cleanQuestionText(practiceQna.question_text || '')}
                             </p>
                             {practiceQna.answer_text && (
-                              <div className="border-t border-slate-800/50 pt-3 space-y-1">
-                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                              <div className="border-t border-slate-150 pt-3 space-y-1">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
                                   <MessageSquare size={10} /> Your Answer
                                 </p>
                                 <p className="text-xs text-slate-400 leading-relaxed italic line-clamp-3">
@@ -424,8 +424,8 @@ export const FinalReport: React.FC<FinalReportProps> = ({
                           </div>
                         </div>
                       ) : (
-                        <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-4">
-                          <p className="text-xs text-slate-500">
+                        <div className="bg-slate-5 border border-slate-150 rounded-xl p-4">
+                          <p className="text-xs text-slate-500 font-normal">
                             No questions were answered for this section during the session.
                           </p>
                         </div>
@@ -433,12 +433,12 @@ export const FinalReport: React.FC<FinalReportProps> = ({
 
                       {/* Strengths */}
                       {strong && strong.toLowerCase() !== 'none' && !strong.toLowerCase().startsWith('none') && (
-                        <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-4 space-y-2">
+                        <div className="bg-emerald-5 border border-emerald-100 rounded-xl p-4 space-y-2">
                           <div className="flex items-center gap-2">
-                            <ThumbsUp size={14} className="text-emerald-400" />
-                            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Strengths Identified</span>
+                            <ThumbsUp size={14} className="text-emerald-700" />
+                            <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">Strengths Identified</span>
                           </div>
-                          <p className="text-sm text-slate-300 leading-relaxed">{strong}</p>
+                          <p className="text-sm text-slate-600 leading-relaxed font-normal">{strong}</p>
                         </div>
                       )}
 
@@ -446,20 +446,20 @@ export const FinalReport: React.FC<FinalReportProps> = ({
                       {weak && (
                         <div className="space-y-3">
                           <div className="flex items-center gap-2">
-                            <Lightbulb size={15} className="text-amber-400" />
-                            <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                            <Lightbulb size={15} className="text-amber-750" />
+                            <span className="text-xs font-bold text-amber-705 uppercase tracking-wider">
                               Suggestions — {company} · {role}
                             </span>
                           </div>
-                          <div className="bg-amber-500/5 border border-amber-500/15 rounded-xl p-4">
-                            <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">{weak}</p>
+                          <div className="bg-amber-5 border border-amber-100 rounded-xl p-4">
+                            <p className="text-sm text-slate-600 leading-relaxed font-normal whitespace-pre-line">{weak}</p>
                           </div>
                         </div>
                       )}
 
                       {/* Fallback: No feedback available */}
                       {!strong && !weak && !practiceQna && (
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-slate-500 font-normal">
                           No feedback data available for this section. Ensure questions were answered during the interview.
                         </p>
                       )}
@@ -472,8 +472,8 @@ export const FinalReport: React.FC<FinalReportProps> = ({
                           </p>
                           <div className="space-y-2">
                             {sectionQnaList.slice(1).map((q: any, qi: number) => (
-                              <div key={qi} className="bg-slate-950/40 border border-slate-900 rounded-lg p-3 flex items-start justify-between gap-3">
-                                <p className="text-xs text-slate-400 leading-relaxed flex-1">{cleanQuestionText(q.question_text || '')}</p>
+                              <div key={qi} className="bg-slate-5 border border-slate-150 rounded-lg p-3 flex items-start justify-between gap-3 shadow-xs">
+                                <p className="text-xs text-slate-500 leading-relaxed flex-1 font-normal">{cleanQuestionText(q.question_text || '')}</p>
                                 <span className={`text-xs font-bold flex-shrink-0 ${scoreColor(q.comm_overall || 0)}`}>
                                   {q.comm_overall || 0}/100
                                 </span>
@@ -493,15 +493,15 @@ export const FinalReport: React.FC<FinalReportProps> = ({
 
       {/* ── Q&A Performance Log ── */}
       {qnas?.length > 0 && (
-        <div className="glass-panel p-6 md:p-8 space-y-4">
-          <h3 className="text-xl font-extrabold text-white flex items-center gap-2.5">
-            <Target size={22} className="text-amber-400" />
+        <div className="glass-panel p-6 md:p-8 space-y-4 border-slate-100 shadow-sm">
+          <h3 className="text-xl font-extrabold text-slate-900 flex items-center gap-2.5">
+            <Target size={22} className="text-amber-600" />
             Full Q&amp;A Performance Log
           </h3>
-          <div className="overflow-x-auto rounded-xl border border-slate-800/60">
+          <div className="overflow-x-auto rounded-xl border border-slate-150 shadow-sm">
             <table className="w-full text-xs">
               <thead>
-                <tr className="bg-slate-950/60 text-slate-400 border-b border-slate-800">
+                <tr className="bg-slate-50 text-slate-500 border-b border-slate-200">
                   <th className="text-left px-4 py-3 font-bold uppercase tracking-wider">#</th>
                   <th className="text-left px-4 py-3 font-bold uppercase tracking-wider">Question</th>
                   <th className="text-left px-4 py-3 font-bold uppercase tracking-wider">Section</th>
@@ -521,16 +521,16 @@ export const FinalReport: React.FC<FinalReportProps> = ({
                     }
                   }
                   return (
-                    <tr key={idx} className="border-b border-slate-900 hover:bg-slate-950/40 transition-colors">
-                      <td className="px-4 py-3 text-slate-500">{idx + 1}</td>
-                      <td className="px-4 py-3 text-slate-300 max-w-xs">
+                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                      <td className="px-4 py-3 text-slate-450">{idx + 1}</td>
+                      <td className="px-4 py-3 text-slate-700 max-w-xs font-normal">
                         <p className="line-clamp-2" title={questionText}>{questionText}</p>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          q.is_technical === 1 ? 'bg-red-500/10 text-red-400' :
-                          q.is_technical === 2 ? 'bg-amber-500/10 text-amber-400' :
-                          'bg-indigo-500/10 text-indigo-400'
+                        <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold border ${
+                          q.is_technical === 1 ? 'bg-rose-50 border-rose-100 text-rose-700' :
+                          q.is_technical === 2 ? 'bg-amber-55 border-amber-100 text-amber-700' :
+                          'bg-indigo-50 border-indigo-100 text-indigo-700'
                         }`}>
                           {q.is_technical === 1 ? 'Technical' :
                            q.is_technical === 2 ? 'Coding' :

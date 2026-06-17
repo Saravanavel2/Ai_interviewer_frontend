@@ -397,12 +397,12 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
   return (
     <div className="max-w-4xl w-full mx-auto animate-slide-up flex flex-col space-y-6">
       {/* Header Info */}
-      <div className="glass-panel p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="glass-panel p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-slate-100 shadow-sm">
         <div>
-          <span className="text-xs font-semibold text-brand-500 uppercase tracking-wider bg-brand-500/10 px-2.5 py-1 rounded-full">
+          <span className="text-xs font-semibold text-brand-600 uppercase tracking-wider bg-brand-50 border border-brand-100 px-2.5 py-1 rounded-full">
             Interview Mode
           </span>
-          <h1 className="text-xl font-bold text-white mt-1">
+          <h1 className="text-xl font-bold text-slate-900 mt-1">
             Preparing for {role} at {company}
           </h1>
         </div>
@@ -410,12 +410,12 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
         {/* Progress Tracker */}
         <div className="w-full md:w-auto flex items-center gap-3">
           <div className="text-right">
-            <p className="text-xs text-slate-500 font-medium">Progress</p>
-            <p className="text-sm font-semibold text-slate-300">
+            <p className="text-xs text-slate-400 font-medium">Progress</p>
+            <p className="text-sm font-semibold text-slate-700 font-sans">
               Step {currentStepNum} of {totalSteps}
             </p>
           </div>
-          <div className="w-32 bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+          <div className="w-32 bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
             <div 
               className="bg-brand-500 h-full rounded-full transition-all duration-500" 
               style={{ width: `${progressPercent}%` }}
@@ -426,25 +426,25 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
 
       {/* Main Sandbox Panel */}
       {stage === 'SECTION_INTRO' && (
-        <div className="glass-panel p-8 flex flex-col space-y-6">
-          <div className="flex items-center gap-3 border-b border-slate-800/60 pb-4">
-            <div className="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center text-brand-500 font-bold">
+        <div className="glass-panel p-8 flex flex-col space-y-6 border-slate-100 shadow-sm">
+          <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+            <div className="w-10 h-10 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-650 font-bold">
               {currentStepNum}
             </div>
             <div>
               <p className="text-xs text-slate-500 font-medium">Verify Resume Section</p>
-              <h2 className="text-xl font-extrabold text-white">{currentSectionName}</h2>
+              <h2 className="text-xl font-extrabold text-slate-900">{currentSectionName}</h2>
             </div>
           </div>
 
-          <div className="bg-slate-950/40 border border-slate-850 rounded-xl p-6">
-            <p className="text-xs text-slate-500 font-semibold mb-2 uppercase tracking-wide">Extracted Content</p>
-            <pre className="text-sm text-slate-300 font-sans whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto pr-2">
+          <div className="bg-slate-5 border border-slate-200/60 rounded-xl p-6">
+            <p className="text-xs text-slate-500 font-bold mb-2 uppercase tracking-wide">Extracted Content</p>
+            <pre className="text-sm text-slate-700 font-sans whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto pr-2">
               {currentSectionContent}
             </pre>
           </div>
 
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-500 leading-relaxed font-normal">
             Let's verify this section. The AI will ask follow-up questions to probe technical depth, clarify project scale, and help you structure descriptions for <strong>{company}</strong>'s hiring bar.
           </p>
 
@@ -464,31 +464,31 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Question & Answer Column */}
           <div className="lg:col-span-2 flex flex-col space-y-6">
-            <div className="glass-panel p-8 flex flex-col space-y-6 relative overflow-hidden">
+            <div className="glass-panel p-8 flex flex-col space-y-6 relative overflow-hidden border-slate-100 shadow-sm">
               {/* Radial background flare */}
               <div className="absolute top-0 right-0 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
               
-              <div className="flex items-center justify-between border-b border-slate-800/60 pb-4">
-                <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider bg-indigo-500/10 px-2 py-1 rounded">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider bg-indigo-50 border border-indigo-100 px-2.5 py-1.5 rounded-full">
                   {currentSectionName} (Question {currentQIdx + 1}/{questions.length})
                 </span>
-                {apiLoading && <span className="text-xs text-slate-500 animate-pulse">Processing response...</span>}
+                {apiLoading && <span className="text-xs text-slate-400 animate-pulse">Processing response...</span>}
               </div>
 
               {/* Question Text */}
               <div className="space-y-2">
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                  <MessageSquare size={12} className="text-brand-500" />
+                  <MessageSquare size={12} className="text-brand-650" />
                   Interviewer:
                 </p>
-                <p className="text-lg font-semibold text-slate-200 leading-relaxed">
+                <p className="text-lg font-semibold text-slate-700 leading-relaxed">
                   {cleanQuestionText(questions[currentQIdx]?.question_text || '')}
                 </p>
               </div>
 
               {!showFeedback ? (
                 /* Answer input */
-                <div className="space-y-4 pt-4 border-t border-slate-850">
+                <div className="space-y-4 pt-4 border-t border-slate-100">
                   <div className="relative">
                     <textarea
                       rows={5}
@@ -504,7 +504,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       type="button"
                       onClick={toggleRecording}
                       disabled={apiLoading}
-                      className={`absolute right-4 bottom-4 p-3 rounded-full transition-all ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white'}`}
+                      className={`absolute right-4 bottom-4 p-3 rounded-full transition-all ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-850'}`}
                       title={isRecording ? 'Stop Recording' : 'Record Voice'}
                     >
                       {isRecording ? <Square size={16} /> : <Mic size={16} />}
@@ -512,7 +512,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                   </div>
 
                   {isRecording && (
-                    <div className="flex items-center gap-2 text-xs text-red-400 animate-pulse font-medium px-1">
+                    <div className="flex items-center gap-2 text-xs text-red-500 animate-pulse font-semibold px-1">
                       <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
                       Listening... Speak clearly. (The transcript will update live).
                     </div>
@@ -530,39 +530,39 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                 </div>
               ) : (
                 /* Scores Display Only */
-                <div className="space-y-6 pt-4 border-t border-slate-850 animate-fade-in">
-                  <div className="flex items-center gap-2 text-brand-400">
+                <div className="space-y-6 pt-4 border-t border-slate-100 animate-fade-in">
+                  <div className="flex items-center gap-2 text-brand-650">
                     <Sparkles size={16} />
                     <h4 className="text-sm font-bold uppercase tracking-wider">Evaluation Scores</h4>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                     {/* Overall Score Card */}
-                    <div className="md:col-span-2 glass-panel bg-brand-500/5 border-brand-500/10 p-5 rounded-xl flex flex-col justify-center items-center text-center">
-                      <p className="text-xs text-brand-400 font-bold uppercase tracking-wider">
+                    <div className="md:col-span-2 glass-panel bg-brand-50 border border-brand-100 p-5 rounded-xl flex flex-col justify-center items-center text-center">
+                      <p className="text-xs text-brand-600 font-bold uppercase tracking-wider">
                         Communication Score
                       </p>
-                      <p className="text-5xl font-extrabold text-white mt-3">
+                      <p className="text-5xl font-extrabold text-slate-850 mt-3">
                         {lastFeedback?.communication?.overall || 0}/100
                       </p>
-                      <p className="text-xs text-slate-500 mt-2">
+                      <p className="text-xs text-slate-400 mt-2">
                         Clarity, structure & pacing
                       </p>
                     </div>
 
                     {/* Breakdown Progress Bars */}
-                    <div className="md:col-span-3 glass-panel bg-slate-900/40 border-slate-850 p-5 rounded-xl space-y-4">
-                      <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+                    <div className="md:col-span-3 glass-panel bg-slate-5 border border-slate-150 p-5 rounded-xl space-y-4">
+                      <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
                         Dimension Breakdown
                       </p>
                       
                       {/* Clarity */}
                       <div className="space-y-1.5">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Clarity</span>
-                          <span className="text-brand-400">{lastFeedback?.communication?.clarity || 0}/100</span>
+                          <span className="text-slate-600">Clarity</span>
+                          <span className="text-brand-600 font-bold">{lastFeedback?.communication?.clarity || 0}/100</span>
                         </div>
-                        <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                           <div className="bg-brand-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.clarity || 0}%` }}></div>
                         </div>
                       </div>
@@ -570,10 +570,10 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       {/* Structure */}
                       <div className="space-y-1.5">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Structure</span>
-                          <span className="text-emerald-400">{lastFeedback?.communication?.structure || 0}/100</span>
+                          <span className="text-slate-600">Structure</span>
+                          <span className="text-emerald-600 font-bold">{lastFeedback?.communication?.structure || 0}/100</span>
                         </div>
-                        <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                           <div className="bg-emerald-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.structure || 0}%` }}></div>
                         </div>
                       </div>
@@ -581,10 +581,10 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       {/* Confidence */}
                       <div className="space-y-1.5">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Confidence</span>
-                          <span className="text-indigo-400">{lastFeedback?.communication?.confidence || 0}/100</span>
+                          <span className="text-slate-600">Confidence</span>
+                          <span className="text-indigo-600 font-bold">{lastFeedback?.communication?.confidence || 0}/100</span>
                         </div>
-                        <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                           <div className="bg-indigo-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.confidence || 0}%` }}></div>
                         </div>
                       </div>
@@ -592,10 +592,10 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       {/* Conciseness */}
                       <div className="space-y-1.5">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Conciseness</span>
-                          <span className="text-rose-400">{lastFeedback?.communication?.conciseness || 0}/100</span>
+                          <span className="text-slate-600">Conciseness</span>
+                          <span className="text-rose-600 font-bold">{lastFeedback?.communication?.conciseness || 0}/100</span>
                         </div>
-                        <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                           <div className="bg-rose-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.conciseness || 0}%` }}></div>
                         </div>
                       </div>
@@ -617,19 +617,19 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
 
           {/* Section details Sidebar */}
           <div className="space-y-6">
-            <div className="glass-panel p-6 flex flex-col space-y-4">
-              <h3 className="font-bold text-white text-md">Extracted Resume Fragment</h3>
-              <div className="p-4 bg-slate-950/60 border border-slate-850 rounded-xl max-h-80 overflow-y-auto text-xs font-mono text-slate-400 whitespace-pre-wrap leading-relaxed">
+            <div className="glass-panel p-6 flex flex-col space-y-4 border-slate-100 shadow-sm">
+              <h3 className="font-bold text-slate-850 text-md">Extracted Resume Fragment</h3>
+              <div className="p-4 bg-slate-5 border border-slate-200/60 rounded-xl max-h-80 overflow-y-auto text-xs font-mono text-slate-65 whitespace-pre-wrap leading-relaxed">
                 {currentSectionContent}
               </div>
             </div>
 
-            <div className="glass-panel p-6 flex flex-col space-y-4">
-              <h3 className="font-bold text-white text-md flex items-center gap-1.5">
-                <ShieldAlert size={16} className="text-indigo-400" />
+            <div className="glass-panel p-6 flex flex-col space-y-4 border-slate-100 shadow-sm">
+              <h3 className="font-bold text-slate-850 text-md flex items-center gap-1.5">
+                <ShieldAlert size={16} className="text-indigo-600" />
                 Interviewer Rubric
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-500 leading-relaxed font-normal">
                 We score communication separately on clarity, organization, conciseness, and fill words, matching candidate answers to <strong>{company}</strong>'s structural requirements (such as STAR templates for behavioral items).
               </p>
             </div>
@@ -638,13 +638,13 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
       )}
 
       {stage === 'TECH_ROUND_INTRO' && (
-        <div className="glass-panel p-8 text-center flex flex-col space-y-6 max-w-xl mx-auto">
-          <div className="w-16 h-16 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500 mx-auto">
+        <div className="glass-panel p-8 text-center flex flex-col space-y-6 max-w-xl mx-auto border-slate-100 shadow-sm">
+          <div className="w-16 h-16 rounded-full bg-brand-5 border border-brand-100 flex items-center justify-center text-brand-650 mx-auto">
             <Award size={32} />
           </div>
           <div>
-            <h2 className="text-2xl font-extrabold text-white">Technical Interview Round</h2>
-            <p className="text-sm text-slate-400 mt-2">
+            <h2 className="text-2xl font-extrabold text-slate-900">Technical Interview Round</h2>
+            <p className="text-sm text-slate-500 mt-2 font-normal leading-relaxed">
               Excellent job completing the resume review! Next, we'll run a technical interview round. The AI will generate 3-5 questions testing tech stack fundamentals, architecture, and problem scenarios tailored to <strong>{role}</strong>.
             </p>
           </div>
@@ -665,17 +665,17 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
           {/* Question/Answer Box */}
           <div className="lg:col-span-2 flex flex-col space-y-6">
-            <div className="glass-panel p-8 flex flex-col space-y-6 relative">
-              <div className="flex items-center justify-between border-b border-slate-800/60 pb-4">
+            <div className="glass-panel p-8 flex flex-col space-y-6 relative border-slate-100 shadow-sm">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-red-400 uppercase tracking-wider bg-red-500/10 px-2 py-1 rounded">
+                  <span className="text-xs font-bold text-rose-600 uppercase tracking-wider bg-rose-5 border border-rose-100 px-2.5 py-1 rounded-full">
                     Technical Round
                   </span>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-slate-500 font-medium">
                     Question {currentQIdx + 1} of {questions.length}
                   </span>
                 </div>
-                <span className="text-xs font-bold text-slate-400">
+                <span className="text-xs font-semibold text-slate-500">
                   Topic: {questions[currentQIdx]?.topic}
                 </span>
               </div>
@@ -685,14 +685,14 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
                   Technical Question:
                 </p>
-                <p className="text-lg font-semibold text-slate-200 leading-relaxed">
+                <p className="text-lg font-semibold text-slate-700 leading-relaxed">
                   {cleanQuestionText(questions[currentQIdx]?.question_text || '')}
                 </p>
               </div>
 
               {!showFeedback ? (
                 /* Text/Voice Input */
-                <div className="space-y-4 pt-4 border-t border-slate-850">
+                <div className="space-y-4 pt-4 border-t border-slate-100">
                   <div className="relative">
                     <textarea
                       rows={5}
@@ -707,14 +707,14 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       type="button"
                       onClick={toggleRecording}
                       disabled={apiLoading}
-                      className={`absolute right-4 bottom-4 p-3 rounded-full transition-all ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white'}`}
+                      className={`absolute right-4 bottom-4 p-3 rounded-full transition-all ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-850'}`}
                     >
                       {isRecording ? <Square size={16} /> : <Mic size={16} />}
                     </button>
                   </div>
 
                   {isRecording && (
-                    <div className="flex items-center gap-2 text-xs text-red-400 animate-pulse font-medium px-1">
+                    <div className="flex items-center gap-2 text-xs text-red-500 animate-pulse font-semibold px-1">
                       <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
                       Listening... Speak clearly.
                     </div>
@@ -732,46 +732,46 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                 </div>
               ) : (
                 /* Technical Scores Display Only */
-                <div className="space-y-6 pt-4 border-t border-slate-850 animate-fade-in">
-                  <div className="flex items-center gap-2 text-brand-400">
+                <div className="space-y-6 pt-4 border-t border-slate-100 animate-fade-in">
+                  <div className="flex items-center gap-2 text-brand-650">
                     <Sparkles size={16} />
                     <h4 className="text-sm font-bold uppercase tracking-wider">Technical Evaluation</h4>
                   </div>
 
                   {/* Primary Scores Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="glass-panel bg-brand-500/5 border-brand-500/10 p-5 rounded-xl flex flex-col justify-center items-center text-center">
-                      <p className="text-xs text-brand-400 font-bold uppercase tracking-wider">
+                    <div className="glass-panel bg-brand-5 border border-brand-100 p-5 rounded-xl flex flex-col justify-center items-center text-center">
+                      <p className="text-xs text-brand-600 font-bold uppercase tracking-wider">
                         Technical Correctness
                       </p>
-                      <p className="text-4xl font-extrabold text-white mt-3">
+                      <p className="text-4xl font-extrabold text-slate-850 mt-3">
                         {lastFeedback?.technical?.correctness_score || 0}/100
                       </p>
                     </div>
 
-                    <div className="glass-panel bg-emerald-500/5 border-emerald-500/10 p-5 rounded-xl flex flex-col justify-center items-center text-center">
-                      <p className="text-xs text-emerald-400 font-bold uppercase tracking-wider">
+                    <div className="glass-panel bg-emerald-5 border border-emerald-100 p-5 rounded-xl flex flex-col justify-center items-center text-center">
+                      <p className="text-xs text-emerald-600 font-bold uppercase tracking-wider">
                         Communication Score
                       </p>
-                      <p className="text-4xl font-extrabold text-white mt-3">
+                      <p className="text-4xl font-extrabold text-slate-850 mt-3">
                         {lastFeedback?.communication?.overall || 0}/100
                       </p>
                     </div>
                   </div>
 
                   {/* Dimension Breakdown */}
-                  <div className="glass-panel bg-slate-900/40 border-slate-850 p-5 rounded-xl space-y-4">
-                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+                  <div className="glass-panel bg-slate-5 border border-slate-150 p-5 rounded-xl space-y-4">
+                    <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
                       Communication Breakdown
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Clarity */}
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Clarity</span>
-                          <span className="text-brand-400">{lastFeedback?.communication?.clarity || 0}/100</span>
+                          <span className="text-slate-600">Clarity</span>
+                          <span className="text-brand-600 font-bold">{lastFeedback?.communication?.clarity || 0}/100</span>
                         </div>
-                        <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                           <div className="bg-brand-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.clarity || 0}%` }}></div>
                         </div>
                       </div>
@@ -779,10 +779,10 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       {/* Structure */}
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Structure</span>
-                          <span className="text-emerald-400">{lastFeedback?.communication?.structure || 0}/100</span>
+                          <span className="text-slate-600">Structure</span>
+                          <span className="text-emerald-600 font-bold">{lastFeedback?.communication?.structure || 0}/100</span>
                         </div>
-                        <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                           <div className="bg-emerald-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.structure || 0}%` }}></div>
                         </div>
                       </div>
@@ -790,10 +790,10 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       {/* Confidence */}
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Confidence</span>
-                          <span className="text-indigo-400">{lastFeedback?.communication?.confidence || 0}/100</span>
+                          <span className="text-slate-600">Confidence</span>
+                          <span className="text-indigo-600 font-bold">{lastFeedback?.communication?.confidence || 0}/100</span>
                         </div>
-                        <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                           <div className="bg-indigo-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.confidence || 0}%` }}></div>
                         </div>
                       </div>
@@ -801,10 +801,10 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       {/* Conciseness */}
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Conciseness</span>
-                          <span className="text-rose-400">{lastFeedback?.communication?.conciseness || 0}/100</span>
+                          <span className="text-slate-600">Conciseness</span>
+                          <span className="text-rose-600 font-bold">{lastFeedback?.communication?.conciseness || 0}/100</span>
                         </div>
-                        <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                           <div className="bg-rose-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.conciseness || 0}%` }}></div>
                         </div>
                       </div>
@@ -826,14 +826,14 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
 
           {/* Technical Info Sidebar */}
           <div className="space-y-6">
-            <div className="glass-panel p-6 flex flex-col space-y-4">
-              <h3 className="font-bold text-white text-md">Role Core Skills</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+            <div className="glass-panel p-6 flex flex-col space-y-4 border-slate-100 shadow-sm">
+              <h3 className="font-bold text-slate-850 text-md">Role Core Skills</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-normal">
                 This round tests technical mastery. Questions are derived from your skills:
               </p>
               <div className="flex flex-wrap gap-2 pt-2">
                 {skills.slice(0, 10).map(s => (
-                  <span key={s} className="bg-slate-900 border border-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded-md">
+                  <span key={s} className="bg-slate-50 border border-slate-200/80 text-slate-600 text-xs px-2.5 py-1 rounded-md font-medium">
                     {s}
                   </span>
                 ))}
@@ -844,13 +844,13 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
       )}
 
       {stage === 'CODING_ROUND_INTRO' && (
-        <div className="glass-panel p-8 text-center flex flex-col space-y-6 max-w-xl mx-auto animate-fade-in">
-          <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-500 mx-auto">
+        <div className="glass-panel p-8 text-center flex flex-col space-y-6 max-w-xl mx-auto animate-fade-in border-slate-100 shadow-sm">
+          <div className="w-16 h-16 rounded-full bg-amber-5 border border-amber-100 flex items-center justify-center text-amber-600 mx-auto">
             <Code size={32} />
           </div>
           <div>
-            <h2 className="text-2xl font-extrabold text-white">Live Coding Round</h2>
-            <p className="text-sm text-slate-400 mt-2">
+            <h2 className="text-2xl font-extrabold text-slate-900">Live Coding Round</h2>
+            <p className="text-sm text-slate-500 mt-2 font-normal leading-relaxed">
               Since you are applying for a technical, coding-based role (<strong>{role}</strong>), we have added a live coding challenge! 
               You will write solution code directly in our sandbox, and compile it against a simulated execution engine supporting multiple compilers (Python, Java, JavaScript) before submitting.
             </p>
@@ -872,26 +872,26 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in">
           {/* Question Description Column (Left) */}
           <div className="lg:col-span-5 flex flex-col space-y-6">
-            <div className="glass-panel p-6 flex flex-col space-y-4 h-[600px] overflow-y-auto">
-              <div className="border-b border-slate-800 pb-3">
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider bg-amber-500/10 px-2.5 py-1 rounded-full">
+            <div className="glass-panel p-6 flex flex-col space-y-4 h-[600px] overflow-y-auto border-slate-100 shadow-sm">
+              <div className="border-b border-slate-100 pb-3">
+                <span className="text-xs font-bold text-amber-600 uppercase tracking-wider bg-amber-5 border border-amber-100 px-2.5 py-1 rounded-full">
                   Live Coding Round
                 </span>
-                <h2 className="text-xl font-extrabold text-white mt-2">{codingQuestion.title}</h2>
+                <h2 className="text-xl font-extrabold text-slate-850 mt-2">{codingQuestion.title}</h2>
                 <div className="flex gap-2 mt-2">
-                  <span className="text-slate-400 text-xs bg-slate-900 border border-slate-850 px-2 py-0.5 rounded">
+                  <span className="text-slate-500 text-xs bg-slate-50 border border-slate-150 px-2 py-0.5 rounded font-medium">
                     {codingQuestion.topic}
                   </span>
-                  <span className={`text-xs px-2 py-0.5 rounded border ${
-                    codingQuestion.difficulty.toLowerCase() === 'easy' ? 'text-green-400 bg-green-500/5 border-green-500/10' :
-                    codingQuestion.difficulty.toLowerCase() === 'medium' ? 'text-amber-400 bg-amber-500/5 border-amber-500/10' :
-                    'text-red-400 bg-red-500/5 border-red-500/10'
+                  <span className={`text-xs px-2 py-0.5 rounded border font-semibold ${
+                    codingQuestion.difficulty.toLowerCase() === 'easy' ? 'text-emerald-600 bg-emerald-50 border-emerald-100' :
+                    codingQuestion.difficulty.toLowerCase() === 'medium' ? 'text-amber-600 bg-amber-55 border-amber-100' :
+                    'text-rose-600 bg-rose-50 border-rose-100'
                   }`}>
                     {codingQuestion.difficulty}
                   </span>
                 </div>
               </div>
-              <div className="text-sm text-slate-300 leading-relaxed font-sans whitespace-pre-wrap">
+              <div className="text-sm text-slate-600 leading-relaxed font-sans whitespace-pre-wrap font-normal">
                 {codingQuestion.description}
               </div>
             </div>
@@ -899,14 +899,14 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
 
           {/* Editor & Console Column (Right) */}
           <div className="lg:col-span-7 flex flex-col space-y-6">
-            <div className="glass-panel p-6 flex flex-col space-y-4 relative overflow-hidden h-[600px]">
+            <div className="glass-panel p-6 flex flex-col space-y-4 relative overflow-hidden h-[600px] border-slate-100 shadow-sm">
               {!showFeedback ? (
                 <>
                   {/* Language Selector */}
-                  <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-                    <label className="text-xs text-slate-400 font-bold uppercase tracking-wide">Language Selector</label>
+                  <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wide">Language Selector</label>
                     <select
-                      className="bg-slate-950/60 border border-slate-800 text-slate-200 text-xs rounded-md px-3 py-1.5 focus:outline-none focus:border-brand-500"
+                      className="bg-white border border-slate-250 text-slate-700 text-xs rounded-md px-3 py-1.5 focus:outline-none focus:border-brand-500 font-medium cursor-pointer shadow-sm"
                       value={selectedLanguage}
                       onChange={(e) => setSelectedLanguage(e.target.value as any)}
                       disabled={apiLoading || compileLoading}
@@ -918,8 +918,8 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                   </div>
 
                   {/* Code Editor */}
-                  <div className="flex-1 min-h-[250px] relative rounded-xl border border-slate-850 bg-slate-950/60 overflow-hidden flex flex-col">
-                    <div className="bg-slate-900/60 border-b border-slate-850 px-4 py-2 flex justify-between items-center text-xs text-slate-500 font-mono">
+                  <div className="flex-1 min-h-[250px] relative rounded-xl border border-slate-200 bg-slate-955 overflow-hidden flex flex-col">
+                    <div className="bg-slate-900 border-b border-slate-800 px-4 py-2 flex justify-between items-center text-xs text-slate-400 font-mono">
                       <span>solution.{selectedLanguage === 'python' ? 'py' : selectedLanguage === 'java' ? 'java' : 'js'}</span>
                       <span>UTF-8</span>
                     </div>
@@ -934,18 +934,18 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                   </div>
 
                   {/* Console Output */}
-                  <div className="h-40 rounded-xl border border-slate-850 bg-slate-950 flex flex-col overflow-hidden">
-                    <div className="bg-slate-900 border-b border-slate-850 px-4 py-1.5 flex justify-between items-center text-xs text-slate-400 font-mono">
+                  <div className="h-40 rounded-xl border border-slate-150 bg-slate-50 flex flex-col overflow-hidden">
+                    <div className="bg-slate-100 border-b border-slate-200 px-4 py-1.5 flex justify-between items-center text-xs text-slate-500 font-mono">
                       <span>Console Terminal</span>
                       {compileSuccess !== null && (
-                        <span className={compileSuccess ? 'text-green-400 font-bold' : 'text-red-400 font-bold'}>
+                        <span className={compileSuccess ? 'text-emerald-600 font-bold' : 'text-rose-600 font-bold'}>
                           {compileSuccess ? '✓ Executed Successfully' : '✗ Compile/Runtime Error'}
                         </span>
                       )}
                     </div>
                     <pre className={`flex-1 p-3 font-mono text-xs overflow-y-auto whitespace-pre-wrap select-text leading-relaxed ${
-                      compileSuccess === null ? 'text-slate-500' :
-                      compileSuccess ? 'text-emerald-400' : 'text-rose-400'
+                      compileSuccess === null ? 'text-slate-400' :
+                      compileSuccess ? 'text-emerald-700' : 'text-rose-650'
                     }`}>
                       {compileLoading ? 'Compiling and executing code sandbox...' : 
                        compileOutput || 'Run your code to see output logs here.'}
@@ -953,12 +953,12 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 font-sans">
                     <button
                       type="button"
                       onClick={handleCompileCode}
                       disabled={apiLoading || compileLoading || !codeAnswer.trim()}
-                      className="flex-1 py-3 px-4 rounded-xl font-bold text-xs bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                      className="flex-1 py-3 px-4 rounded-xl font-bold text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-650 hover:text-slate-850 flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-sm"
                     >
                       {compileLoading ? 'Executing...' : 'Run Code'}
                     </button>
@@ -966,7 +966,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       type="button"
                       onClick={handleSubmitCodingAnswer}
                       disabled={apiLoading || compileLoading || !codeAnswer.trim()}
-                      className="flex-1 py-3 px-4 rounded-xl font-bold text-xs bg-brand-500 hover:bg-brand-600 text-white flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-brand-500/20"
+                      className="flex-1 py-3 px-4 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-brand-600/10"
                     >
                       {apiLoading ? 'Submitting...' : 'Submit Solution'}
                     </button>
@@ -976,46 +976,46 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                 /* Scores Display Only */
                 <div className="space-y-6 flex flex-col justify-between h-full animate-fade-in">
                   <div className="space-y-6">
-                    <div className="flex items-center gap-2 text-brand-400">
+                    <div className="flex items-center gap-2 text-brand-650">
                       <Sparkles size={16} />
                       <h4 className="text-sm font-bold uppercase tracking-wider">Solution Assessment</h4>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Technical Correctness Card */}
-                      <div className="glass-panel bg-brand-500/5 border-brand-500/10 p-5 rounded-xl flex flex-col justify-center items-center text-center">
-                        <p className="text-xs text-brand-400 font-bold uppercase tracking-wider">
+                      <div className="glass-panel bg-brand-5 border border-brand-100 p-5 rounded-xl flex flex-col justify-center items-center text-center">
+                        <p className="text-xs text-brand-600 font-bold uppercase tracking-wider">
                           Code Correctness
                         </p>
-                        <p className="text-5xl font-extrabold text-white mt-3">
+                        <p className="text-5xl font-extrabold text-slate-850 mt-3">
                           {lastFeedback?.technical?.correctness_score || 0}/100
                         </p>
                       </div>
 
                       {/* Readability/Documentation Card */}
-                      <div className="glass-panel bg-emerald-500/5 border-emerald-500/10 p-5 rounded-xl flex flex-col justify-center items-center text-center">
-                        <p className="text-xs text-emerald-400 font-bold uppercase tracking-wider">
+                      <div className="glass-panel bg-emerald-5 border border-emerald-100 p-5 rounded-xl flex flex-col justify-center items-center text-center">
+                        <p className="text-xs text-emerald-600 font-bold uppercase tracking-wider">
                           Code Cleanliness
                         </p>
-                        <p className="text-5xl font-extrabold text-white mt-3">
+                        <p className="text-5xl font-extrabold text-slate-850 mt-3">
                           {lastFeedback?.communication?.overall || 0}/100
                         </p>
                       </div>
                     </div>
 
                     {/* Breakdown Progress Bars */}
-                    <div className="glass-panel bg-slate-900/40 border-slate-850 p-5 rounded-xl space-y-4">
-                      <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+                    <div className="glass-panel bg-slate-5 border border-slate-150 p-5 rounded-xl space-y-4">
+                      <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
                         Dimension Breakdown
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Clarity */}
                         <div className="space-y-1">
                           <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-300">Clarity & Comments</span>
-                            <span className="text-brand-400">{lastFeedback?.communication?.clarity || 0}/100</span>
+                            <span className="text-slate-600 font-medium">Clarity & Comments</span>
+                            <span className="text-brand-600 font-bold">{lastFeedback?.communication?.clarity || 0}/100</span>
                           </div>
-                          <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                          <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                             <div className="bg-brand-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.clarity || 0}%` }}></div>
                           </div>
                         </div>
@@ -1023,10 +1023,10 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                         {/* Structure */}
                         <div className="space-y-1">
                           <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-300">Layout & Indent</span>
-                            <span className="text-emerald-400">{lastFeedback?.communication?.structure || 0}/100</span>
+                            <span className="text-slate-600 font-medium">Layout & Indent</span>
+                            <span className="text-emerald-600 font-bold">{lastFeedback?.communication?.structure || 0}/100</span>
                           </div>
-                          <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                          <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                             <div className="bg-emerald-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.structure || 0}%` }}></div>
                           </div>
                         </div>
@@ -1034,10 +1034,10 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                         {/* Modularity */}
                         <div className="space-y-1">
                           <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-300">Modularity</span>
-                            <span className="text-indigo-400">{lastFeedback?.communication?.confidence || 0}/100</span>
+                            <span className="text-slate-600 font-medium">Modularity</span>
+                            <span className="text-indigo-600 font-bold">{lastFeedback?.communication?.confidence || 0}/100</span>
                           </div>
-                          <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                          <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                             <div className="bg-indigo-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.confidence || 0}%` }}></div>
                           </div>
                         </div>
@@ -1045,10 +1045,10 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                         {/* Efficiency */}
                         <div className="space-y-1">
                           <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-300">Cleanliness & DRY</span>
-                            <span className="text-rose-400">{lastFeedback?.communication?.conciseness || 0}/100</span>
+                            <span className="text-slate-600 font-medium">Cleanliness & DRY</span>
+                            <span className="text-rose-600 font-bold">{lastFeedback?.communication?.conciseness || 0}/100</span>
                           </div>
-                          <div className="bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-900">
+                          <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
                             <div className="bg-rose-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.conciseness || 0}%` }}></div>
                           </div>
                         </div>

@@ -149,16 +149,16 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ token, role, company
 
   return (
     <div className="max-w-xl w-full mx-auto animate-slide-up">
-      <div className="glass-panel p-8 border border-slate-800/80 text-center">
-        <h2 className="text-2xl font-extrabold tracking-tight text-white mb-2">
+      <div className="glass-panel p-8 border border-slate-100 text-center">
+        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 mb-2">
           Upload Your Resume
         </h2>
-        <p className="text-sm text-slate-400 mb-8 max-w-sm mx-auto">
+        <p className="text-sm text-slate-500 mb-8 max-w-sm mx-auto">
           We support PDF and DOCX formats. Our LLM parses your experience to curate section-specific follow-ups.
         </p>
 
         {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-left">
+          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm text-left">
             {error}
           </div>
         )}
@@ -169,7 +169,7 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ token, role, company
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               onClick={triggerFileSelect}
-              className="border-2 border-dashed border-slate-800 hover:border-brand-500/50 bg-slate-950/20 rounded-2xl p-10 cursor-pointer transition-all duration-200 group"
+              className="border-2 border-dashed border-slate-200 hover:border-brand-500/50 bg-slate-50/50 hover:bg-brand-50/10 rounded-2xl p-10 cursor-pointer transition-all duration-200 group shadow-sm"
             >
               <input
                 type="file"
@@ -180,15 +180,15 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ token, role, company
               />
               
               <div className="flex flex-col items-center justify-center">
-                <UploadCloud size={48} className="text-slate-500 group-hover:text-brand-500 transition-colors mb-4" />
+                <UploadCloud size={48} className="text-slate-400 group-hover:text-brand-500 transition-colors mb-4" />
                 {file ? (
-                  <div className="flex items-center gap-2 text-brand-400 font-medium">
+                  <div className="flex items-center gap-2 text-brand-600 font-semibold">
                     <FileText size={18} />
                     <span className="truncate max-w-xs">{file.name}</span>
                   </div>
                 ) : (
                   <>
-                    <p className="text-sm font-semibold text-slate-300">
+                    <p className="text-sm font-semibold text-slate-600">
                       Drag & drop your file here, or <span className="text-brand-500 group-hover:underline">browse</span>
                     </p>
                     <p className="text-xs text-slate-500 mt-2">
@@ -204,7 +204,7 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ token, role, company
                 <button
                   type="button"
                   onClick={onBack}
-                  className="flex-1 px-4 py-3 rounded-xl border border-slate-850 hover:bg-slate-900/60 font-semibold text-sm transition-all active:scale-95"
+                  className="flex-1 px-4 py-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-semibold text-sm text-slate-700 transition-all active:scale-95 shadow-sm"
                 >
                   Back to Settings
                 </button>
@@ -218,11 +218,11 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ token, role, company
                 </button>
               </div>
               
-              <div className="pt-2 border-t border-slate-900">
+              <div className="pt-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={handleUseDemo}
-                  className="text-xs text-brand-500 hover:text-brand-400 hover:underline font-semibold"
+                  className="text-xs text-brand-500 hover:text-brand-600 hover:underline font-semibold"
                 >
                   Or, skip upload and use a sample resume for testing
                 </button>
@@ -232,13 +232,13 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({ token, role, company
         ) : (
           <div className="py-12 flex flex-col items-center justify-center space-y-6">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full border-4 border-slate-850 border-t-brand-500 animate-spin"></div>
+              <div className="w-16 h-16 rounded-full border-4 border-slate-200 border-t-brand-500 animate-spin"></div>
               <div className="absolute inset-0 flex items-center justify-center">
                 <RefreshCw size={20} className="text-brand-500 animate-pulse" />
               </div>
             </div>
             <div className="space-y-2">
-              <p className="text-slate-300 font-medium text-lg animate-pulse">{statusText}</p>
+              <p className="text-slate-700 font-semibold text-lg animate-pulse">{statusText}</p>
               <p className="text-xs text-slate-500">This might take a few seconds as LLM parses the details.</p>
             </div>
           </div>
