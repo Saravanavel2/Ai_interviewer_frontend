@@ -111,6 +111,15 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
       rec.onerror = (e: any) => {
         console.error('Speech recognition error:', e);
         setIsRecording(false);
+        if (e.error === 'network') {
+          alert('Voice recognition failed due to a network connection timeout. Please type your answer directly.');
+        } else if (e.error === 'not-allowed') {
+          alert('Microphone access was blocked. Please permit microphone access in your browser settings or type your answer.');
+        } else if (e.error === 'no-speech') {
+          console.warn('Speech recognition: No speech detected.');
+        } else {
+          alert(`Voice input error: ${e.error || 'unknown'}. Please type your answer instead.`);
+        }
       };
 
       rec.onend = () => {
