@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Square, Mic, Send, ArrowRight, Award, ShieldAlert, Sparkles, MessageSquare, Code, Play } from 'lucide-react';
+import { Square, Mic, Send, ArrowRight, Award, ShieldAlert, Sparkles, MessageSquare, Code } from 'lucide-react';
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';

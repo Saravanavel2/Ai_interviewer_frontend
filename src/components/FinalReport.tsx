@@ -299,7 +299,6 @@ export const FinalReport: React.FC<FinalReportProps> = ({
               const { strong, weak } = parseFeedback(lastFeedbackRaw);
 
               // If no structured feedback, try the improved_version field as a proxy
-              const hasAnything = strong || weak || practiceQna || section.improved_version;
               const isExpanded = expanded.has(idx);
               const icon = SECTION_ICONS[section.section_type] || <FileText size={16} className="text-slate-400" />;
 
