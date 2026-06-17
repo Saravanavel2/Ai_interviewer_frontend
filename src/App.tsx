@@ -106,13 +106,6 @@ function App() {
                 <span>{userData.target_role} @ {userData.target_company}</span>
               </div>
             )}
-            <a 
-              href="https://github.com" 
-              target="_blank" 
-              className="hover:text-white transition-colors"
-            >
-              Docs
-            </a>
           </div>
         </div>
       </header>
