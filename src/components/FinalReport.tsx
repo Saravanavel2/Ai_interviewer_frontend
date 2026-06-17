@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = 'https://ai-interviewer-backend-lk0k.onrender.com';
+const API_URL = 'http://localhost:5000';
 
 interface FinalReportProps {
   token: string;

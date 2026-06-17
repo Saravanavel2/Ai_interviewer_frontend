@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Square, Mic, Send, ArrowRight, Award, ShieldAlert, Sparkles, MessageSquare, Code } from 'lucide-react';
+import { Square, Mic, Send, ArrowRight, Award, ShieldAlert, Sparkles, MessageSquare } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = 'https://ai-interviewer-backend-lk0k.onrender.com';
+const API_URL = 'http://localhost:5000';
 
 interface InterviewSessionProps {
   token: string;
@@ -23,24 +23,6 @@ const SECTION_ORDER = [
   'Education'
 ];
 
-// Helper to check if role is coding-based
-const isCodingRole = (roleName: string) => {
-  const lower = roleName.toLowerCase();
-  return lower.includes('developer') || 
-         lower.includes('engineer') || 
-         lower.includes('programmer') || 
-         lower.includes('coder') || 
-         lower.includes('software') || 
-         lower.includes('fullstack') || 
-         lower.includes('backend') || 
-         lower.includes('frontend') || 
-         lower.includes('web') || 
-         lower.includes('coding') ||
-         lower.includes('development') ||
-         lower.includes('architect') ||
-         lower.includes('science') ||
-         lower.includes('analyst');
-};
 
 // Helper to clean and strip JSON wrappers or numbering from question text
 function cleanQuestionText(text: string): string {
@@ -105,7 +87,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
   });
 
   const [currentSectionIdx, setCurrentSectionIdx] = useState(0);
-  const [stage, setStage] = useState<'SECTION_INTRO' | 'QUESTIONS' | 'TECH_ROUND_INTRO' | 'TECH_ROUND' | 'CODING_ROUND_INTRO' | 'CODING_ROUND'>('SECTION_INTRO');
+  const [stage, setStage] = useState<'SECTION_INTRO' | 'QUESTIONS' | 'TECH_ROUND_INTRO' | 'TECH_ROUND'>('SECTION_INTRO');
   
   // Q&A State
   const [questions, setQuestions] = useState<any[]>([]);
@@ -116,14 +98,6 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
   // Feedback view state
   const [lastFeedback, setLastFeedback] = useState<any>(null);
   const [showFeedback, setShowFeedback] = useState(false);
-
-  // Coding Round State
-  const [codingQuestion, setCodingQuestion] = useState<any>(null);
-  const [selectedLanguage, setSelectedLanguage] = useState<'python' | 'java' | 'javascript'>('javascript');
-  const [codeAnswer, setCodeAnswer] = useState('');
-  const [compileOutput, setCompileOutput] = useState('');
-  const [compileSuccess, setCompileSuccess] = useState<boolean | null>(null);
-  const [compileLoading, setCompileLoading] = useState(false);
 
   // Audio / Speech Recognition
   const [isRecording, setIsRecording] = useState(false);
@@ -245,12 +219,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
     }
   };
 
-  // Synchronize solution editor template when selectedLanguage or codingQuestion changes
-  useEffect(() => {
-    if (codingQuestion && codingQuestion.templates) {
-      setCodeAnswer(codingQuestion.templates[selectedLanguage] || '');
-    }
-  }, [selectedLanguage, codingQuestion]);
+
 
   const handleNextQuestion = () => {
     setShowFeedback(false);
@@ -270,14 +239,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
           setStage('TECH_ROUND_INTRO');
         }
       } else if (stage === 'TECH_ROUND') {
-        // Technical round completed! Check if coding role
-        if (isCodingRole(role)) {
-          setStage('CODING_ROUND_INTRO');
-        } else {
-          onSessionComplete();
-        }
-      } else if (stage === 'CODING_ROUND') {
-        // Coding round completed! Final Session Completion
+        // Technical round completed! Final Session Completion
         onSessionComplete();
       }
     }
@@ -304,85 +266,11 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
     }
   };
 
-  // Step 5: Start Coding Round
-  const handleStartCodingRound = async () => {
-    setApiLoading(true);
-    try {
-      const response = await axios.post(`${API_URL}/api/session/${sessionId}/generate-coding-question`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
 
-      setCodingQuestion(response.data);
-      setSelectedLanguage('javascript');
-      setCompileOutput('');
-      setCompileSuccess(null);
-      setStage('CODING_ROUND');
-      setShowFeedback(false);
-      setLastFeedback(null);
-    } catch (err) {
-      console.error(err);
-      alert('Failed to generate live coding question.');
-    } finally {
-      setApiLoading(false);
-    }
-  };
-
-  // Step 6: Compile & Run Sandbox Simulator
-  const handleCompileCode = async () => {
-    if (!codeAnswer.trim()) return;
-    setCompileLoading(true);
-    setCompileOutput('Compiling and running execution sandbox...');
-    setCompileSuccess(null);
-    try {
-      const response = await axios.post(`${API_URL}/api/session/${sessionId}/compile`, {
-        code: codeAnswer,
-        language: selectedLanguage
-      }, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      setCompileOutput(response.data.output);
-      setCompileSuccess(response.data.success);
-    } catch (err) {
-      console.error(err);
-      setCompileOutput('Execution failed: Compiler sandbox execution timed out.');
-      setCompileSuccess(false);
-    } finally {
-      setCompileLoading(false);
-    }
-  };
-
-  // Step 7: Submit solution and score
-  const handleSubmitCodingAnswer = async () => {
-    if (!codeAnswer.trim()) return;
-    setApiLoading(true);
-
-    try {
-      const response = await axios.post(`${API_URL}/api/session/${sessionId}/answer`, {
-        question_id: codingQuestion.id,
-        answer_text: codeAnswer,
-        coding_language: selectedLanguage,
-        compilation_status: compileSuccess ? 'Success' : 'Compile Error'
-      }, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      setLastFeedback(response.data);
-      setShowFeedback(true);
-    } catch (err) {
-      console.error(err);
-      alert('Error submitting solution. Please try again.');
-    } finally {
-      setApiLoading(false);
-    }
-  };
 
   // Progress computation
-  const hasCoding = isCodingRole(role);
-  const totalSteps = availableSections.length + 1 + (hasCoding ? 1 : 0); // resume sections + 1 technical + 1 coding
+  const totalSteps = availableSections.length + 1; // resume sections + 1 technical
   const currentStepNum = stage === 'TECH_ROUND_INTRO' || stage === 'TECH_ROUND' 
-    ? availableSections.length + 1
-    : stage === 'CODING_ROUND_INTRO' || stage === 'CODING_ROUND'
     ? totalSteps
     : currentSectionIdx + 1;
 
@@ -390,8 +278,6 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
   if ((stage === 'QUESTIONS' || stage === 'TECH_ROUND') && questions.length > 0) {
     const qProgress = currentQIdx / questions.length;
     progressPercent = ((currentStepNum - 1 + qProgress) / totalSteps) * 100;
-  } else if (stage === 'CODING_ROUND') {
-    progressPercent = ((totalSteps - 1 + (showFeedback ? 1 : 0.5)) / totalSteps) * 100;
   }
 
   return (
@@ -470,26 +356,27 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
               
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider bg-indigo-50 border border-indigo-100 px-2.5 py-1.5 rounded-full">
-                  {currentSectionName} (Question {currentQIdx + 1}/{questions.length})
+                  {currentSectionName} — Q{currentQIdx + 1} of {questions.length}
                 </span>
                 {apiLoading && <span className="text-xs text-slate-400 animate-pulse">Processing response...</span>}
               </div>
 
               {/* Question Text */}
-              <div className="space-y-2">
-                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                  <MessageSquare size={12} className="text-brand-650" />
-                  Interviewer:
+              <div className="space-y-3 bg-indigo-50/40 border border-indigo-100 rounded-xl p-5">
+                <p className="text-xs text-indigo-600 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <MessageSquare size={12} />
+                  Interviewer Question
                 </p>
-                <p className="text-lg font-semibold text-slate-700 leading-relaxed">
+                <p className="text-base font-semibold text-slate-800 leading-relaxed">
                   {cleanQuestionText(questions[currentQIdx]?.question_text || '')}
                 </p>
               </div>
 
               {!showFeedback ? (
                 /* Answer input */
-                <div className="space-y-4 pt-4 border-t border-slate-100">
+                <div className="space-y-4">
                   <div className="relative">
+                    <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-2">Your Answer</p>
                     <textarea
                       rows={5}
                       className="glass-input w-full pr-12 resize-none"
@@ -542,8 +429,8 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                       <p className="text-xs text-brand-600 font-bold uppercase tracking-wider">
                         Communication Score
                       </p>
-                      <p className="text-5xl font-extrabold text-slate-850 mt-3">
-                        {lastFeedback?.communication?.overall || 0}/100
+                      <p className="text-5xl font-extrabold text-slate-800 mt-3">
+                        {lastFeedback?.communication?.overall || 0}<span className="text-xl text-slate-400">/100</span>
                       </p>
                       <p className="text-xs text-slate-400 mt-2">
                         Clarity, structure & pacing
@@ -551,7 +438,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                     </div>
 
                     {/* Breakdown Progress Bars */}
-                    <div className="md:col-span-3 glass-panel bg-slate-5 border border-slate-150 p-5 rounded-xl space-y-4">
+                    <div className="md:col-span-3 bg-slate-50 border border-slate-200 p-5 rounded-xl space-y-4">
                       <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
                         Dimension Breakdown
                       </p>
@@ -562,7 +449,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                           <span className="text-slate-600">Clarity</span>
                           <span className="text-brand-600 font-bold">{lastFeedback?.communication?.clarity || 0}/100</span>
                         </div>
-                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden">
                           <div className="bg-brand-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.clarity || 0}%` }}></div>
                         </div>
                       </div>
@@ -573,7 +460,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                           <span className="text-slate-600">Structure</span>
                           <span className="text-emerald-600 font-bold">{lastFeedback?.communication?.structure || 0}/100</span>
                         </div>
-                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden">
                           <div className="bg-emerald-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.structure || 0}%` }}></div>
                         </div>
                       </div>
@@ -584,7 +471,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                           <span className="text-slate-600">Confidence</span>
                           <span className="text-indigo-600 font-bold">{lastFeedback?.communication?.confidence || 0}/100</span>
                         </div>
-                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden">
                           <div className="bg-indigo-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.confidence || 0}%` }}></div>
                         </div>
                       </div>
@@ -595,7 +482,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
                           <span className="text-slate-600">Conciseness</span>
                           <span className="text-rose-600 font-bold">{lastFeedback?.communication?.conciseness || 0}/100</span>
                         </div>
-                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
+                        <div className="bg-slate-200 rounded-full h-2 overflow-hidden">
                           <div className="bg-rose-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.conciseness || 0}%` }}></div>
                         </div>
                       </div>
@@ -618,19 +505,19 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
           {/* Section details Sidebar */}
           <div className="space-y-6">
             <div className="glass-panel p-6 flex flex-col space-y-4 border-slate-100 shadow-sm">
-              <h3 className="font-bold text-slate-850 text-md">Extracted Resume Fragment</h3>
-              <div className="p-4 bg-slate-5 border border-slate-200/60 rounded-xl max-h-80 overflow-y-auto text-xs font-mono text-slate-65 whitespace-pre-wrap leading-relaxed">
+              <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wide">Resume Fragment</h3>
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl max-h-80 overflow-y-auto text-xs font-mono text-slate-600 whitespace-pre-wrap leading-relaxed">
                 {currentSectionContent}
               </div>
             </div>
 
             <div className="glass-panel p-6 flex flex-col space-y-4 border-slate-100 shadow-sm">
-              <h3 className="font-bold text-slate-850 text-md flex items-center gap-1.5">
-                <ShieldAlert size={16} className="text-indigo-600" />
-                Interviewer Rubric
+              <h3 className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                <ShieldAlert size={14} className="text-indigo-600" />
+                Scoring Rubric
               </h3>
-              <p className="text-xs text-slate-500 leading-relaxed font-normal">
-                We score communication separately on clarity, organization, conciseness, and fill words, matching candidate answers to <strong>{company}</strong>'s structural requirements (such as STAR templates for behavioral items).
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Answers are scored on clarity, structure, conciseness, and confidence — matched to <strong className="text-slate-700">{company}</strong>'s hiring bar (STAR format recommended).
               </p>
             </div>
           </div>
@@ -843,233 +730,7 @@ export const InterviewSession: React.FC<InterviewSessionProps> = ({
         </div>
       )}
 
-      {stage === 'CODING_ROUND_INTRO' && (
-        <div className="glass-panel p-8 text-center flex flex-col space-y-6 max-w-xl mx-auto animate-fade-in border-slate-100 shadow-sm">
-          <div className="w-16 h-16 rounded-full bg-amber-5 border border-amber-100 flex items-center justify-center text-amber-600 mx-auto">
-            <Code size={32} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-extrabold text-slate-900">Live Coding Round</h2>
-            <p className="text-sm text-slate-500 mt-2 font-normal leading-relaxed">
-              Since you are applying for a technical, coding-based role (<strong>{role}</strong>), we have added a live coding challenge! 
-              You will write solution code directly in our sandbox, and compile it against a simulated execution engine supporting multiple compilers (Python, Java, JavaScript) before submitting.
-            </p>
-          </div>
 
-          <button
-            type="button"
-            onClick={handleStartCodingRound}
-            disabled={apiLoading}
-            className="glow-btn py-4 flex items-center justify-center gap-2"
-          >
-            {apiLoading ? 'Generating Challenge...' : 'Start Live Coding Round'}
-            <ArrowRight size={18} />
-          </button>
-        </div>
-      )}
-
-      {stage === 'CODING_ROUND' && codingQuestion && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in">
-          {/* Question Description Column (Left) */}
-          <div className="lg:col-span-5 flex flex-col space-y-6">
-            <div className="glass-panel p-6 flex flex-col space-y-4 h-[600px] overflow-y-auto border-slate-100 shadow-sm">
-              <div className="border-b border-slate-100 pb-3">
-                <span className="text-xs font-bold text-amber-600 uppercase tracking-wider bg-amber-5 border border-amber-100 px-2.5 py-1 rounded-full">
-                  Live Coding Round
-                </span>
-                <h2 className="text-xl font-extrabold text-slate-850 mt-2">{codingQuestion.title}</h2>
-                <div className="flex gap-2 mt-2">
-                  <span className="text-slate-500 text-xs bg-slate-50 border border-slate-150 px-2 py-0.5 rounded font-medium">
-                    {codingQuestion.topic}
-                  </span>
-                  <span className={`text-xs px-2 py-0.5 rounded border font-semibold ${
-                    codingQuestion.difficulty.toLowerCase() === 'easy' ? 'text-emerald-600 bg-emerald-50 border-emerald-100' :
-                    codingQuestion.difficulty.toLowerCase() === 'medium' ? 'text-amber-600 bg-amber-55 border-amber-100' :
-                    'text-rose-600 bg-rose-50 border-rose-100'
-                  }`}>
-                    {codingQuestion.difficulty}
-                  </span>
-                </div>
-              </div>
-              <div className="text-sm text-slate-600 leading-relaxed font-sans whitespace-pre-wrap font-normal">
-                {codingQuestion.description}
-              </div>
-            </div>
-          </div>
-
-          {/* Editor & Console Column (Right) */}
-          <div className="lg:col-span-7 flex flex-col space-y-6">
-            <div className="glass-panel p-6 flex flex-col space-y-4 relative overflow-hidden h-[600px] border-slate-100 shadow-sm">
-              {!showFeedback ? (
-                <>
-                  {/* Language Selector */}
-                  <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wide">Language Selector</label>
-                    <select
-                      className="bg-white border border-slate-250 text-slate-700 text-xs rounded-md px-3 py-1.5 focus:outline-none focus:border-brand-500 font-medium cursor-pointer shadow-sm"
-                      value={selectedLanguage}
-                      onChange={(e) => setSelectedLanguage(e.target.value as any)}
-                      disabled={apiLoading || compileLoading}
-                    >
-                      <option value="javascript">JavaScript</option>
-                      <option value="python">Python</option>
-                      <option value="java">Java</option>
-                    </select>
-                  </div>
-
-                  {/* Code Editor */}
-                  <div className="flex-1 min-h-[250px] relative rounded-xl border border-slate-200 bg-slate-955 overflow-hidden flex flex-col">
-                    <div className="bg-slate-900 border-b border-slate-800 px-4 py-2 flex justify-between items-center text-xs text-slate-400 font-mono">
-                      <span>solution.{selectedLanguage === 'python' ? 'py' : selectedLanguage === 'java' ? 'java' : 'js'}</span>
-                      <span>UTF-8</span>
-                    </div>
-                    <textarea
-                      className="flex-1 w-full bg-transparent text-slate-200 font-mono text-sm p-4 resize-none focus:outline-none leading-relaxed"
-                      style={{ tabSize: 4 }}
-                      value={codeAnswer}
-                      onChange={(e) => setCodeAnswer(e.target.value)}
-                      disabled={apiLoading || compileLoading}
-                      placeholder="// Write your solution code here..."
-                    ></textarea>
-                  </div>
-
-                  {/* Console Output */}
-                  <div className="h-40 rounded-xl border border-slate-150 bg-slate-50 flex flex-col overflow-hidden">
-                    <div className="bg-slate-100 border-b border-slate-200 px-4 py-1.5 flex justify-between items-center text-xs text-slate-500 font-mono">
-                      <span>Console Terminal</span>
-                      {compileSuccess !== null && (
-                        <span className={compileSuccess ? 'text-emerald-600 font-bold' : 'text-rose-600 font-bold'}>
-                          {compileSuccess ? '✓ Executed Successfully' : '✗ Compile/Runtime Error'}
-                        </span>
-                      )}
-                    </div>
-                    <pre className={`flex-1 p-3 font-mono text-xs overflow-y-auto whitespace-pre-wrap select-text leading-relaxed ${
-                      compileSuccess === null ? 'text-slate-400' :
-                      compileSuccess ? 'text-emerald-700' : 'text-rose-650'
-                    }`}>
-                      {compileLoading ? 'Compiling and executing code sandbox...' : 
-                       compileOutput || 'Run your code to see output logs here.'}
-                    </pre>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-4 font-sans">
-                    <button
-                      type="button"
-                      onClick={handleCompileCode}
-                      disabled={apiLoading || compileLoading || !codeAnswer.trim()}
-                      className="flex-1 py-3 px-4 rounded-xl font-bold text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-650 hover:text-slate-850 flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-sm"
-                    >
-                      {compileLoading ? 'Executing...' : 'Run Code'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleSubmitCodingAnswer}
-                      disabled={apiLoading || compileLoading || !codeAnswer.trim()}
-                      className="flex-1 py-3 px-4 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-brand-600/10"
-                    >
-                      {apiLoading ? 'Submitting...' : 'Submit Solution'}
-                    </button>
-                  </div>
-                </>
-              ) : (
-                /* Scores Display Only */
-                <div className="space-y-6 flex flex-col justify-between h-full animate-fade-in">
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-2 text-brand-650">
-                      <Sparkles size={16} />
-                      <h4 className="text-sm font-bold uppercase tracking-wider">Solution Assessment</h4>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Technical Correctness Card */}
-                      <div className="glass-panel bg-brand-5 border border-brand-100 p-5 rounded-xl flex flex-col justify-center items-center text-center">
-                        <p className="text-xs text-brand-600 font-bold uppercase tracking-wider">
-                          Code Correctness
-                        </p>
-                        <p className="text-5xl font-extrabold text-slate-850 mt-3">
-                          {lastFeedback?.technical?.correctness_score || 0}/100
-                        </p>
-                      </div>
-
-                      {/* Readability/Documentation Card */}
-                      <div className="glass-panel bg-emerald-5 border border-emerald-100 p-5 rounded-xl flex flex-col justify-center items-center text-center">
-                        <p className="text-xs text-emerald-600 font-bold uppercase tracking-wider">
-                          Code Cleanliness
-                        </p>
-                        <p className="text-5xl font-extrabold text-slate-850 mt-3">
-                          {lastFeedback?.communication?.overall || 0}/100
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Breakdown Progress Bars */}
-                    <div className="glass-panel bg-slate-5 border border-slate-150 p-5 rounded-xl space-y-4">
-                      <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                        Dimension Breakdown
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Clarity */}
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-600 font-medium">Clarity & Comments</span>
-                            <span className="text-brand-600 font-bold">{lastFeedback?.communication?.clarity || 0}/100</span>
-                          </div>
-                          <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
-                            <div className="bg-brand-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.clarity || 0}%` }}></div>
-                          </div>
-                        </div>
-
-                        {/* Structure */}
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-600 font-medium">Layout & Indent</span>
-                            <span className="text-emerald-600 font-bold">{lastFeedback?.communication?.structure || 0}/100</span>
-                          </div>
-                          <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
-                            <div className="bg-emerald-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.structure || 0}%` }}></div>
-                          </div>
-                        </div>
-
-                        {/* Modularity */}
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-600 font-medium">Modularity</span>
-                            <span className="text-indigo-600 font-bold">{lastFeedback?.communication?.confidence || 0}/100</span>
-                          </div>
-                          <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
-                            <div className="bg-indigo-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.confidence || 0}%` }}></div>
-                          </div>
-                        </div>
-
-                        {/* Efficiency */}
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-600 font-medium">Cleanliness & DRY</span>
-                            <span className="text-rose-600 font-bold">{lastFeedback?.communication?.conciseness || 0}/100</span>
-                          </div>
-                          <div className="bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-200">
-                            <div className="bg-rose-500 h-full rounded-full transition-all duration-500" style={{ width: `${lastFeedback?.communication?.conciseness || 0}%` }}></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleNextQuestion}
-                    className="glow-btn w-full py-4 flex items-center justify-center gap-2"
-                  >
-                    View Session Report
-                    <ArrowRight size={18} />
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

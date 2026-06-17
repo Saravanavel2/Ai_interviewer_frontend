@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { UploadCloud, FileText, RefreshCw } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = 'https://ai-interviewer-backend-lk0k.onrender.com';
+const API_URL = 'http://localhost:5000';
 
 interface ResumeUploadProps {
   token: string;

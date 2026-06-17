@@ -22,7 +22,7 @@ interface ResumeData {
   sections: Record<string, string>;
 }
 
-const API_URL = 'https://ai-interviewer-backend-lk0k.onrender.com';
+const API_URL = 'http://localhost:5000';
 
 function App() {
   const [step, setStep] = useState<Step>('ONBOARDING');
