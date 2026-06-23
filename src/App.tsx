@@ -4,10 +4,11 @@ import { ResumeUpload } from './components/ResumeUpload';
 import { ATSScoreView } from './components/ATSScoreView';
 import { InterviewSession } from './components/InterviewSession';
 import { FinalReport } from './components/FinalReport';
+import { LandingPage } from './components/LandingPage';
 import { GraduationCap } from 'lucide-react';
 import axios from 'axios';
 
-type Step = 'ONBOARDING' | 'UPLOAD' | 'ATS_CHECK' | 'SESSION' | 'REPORT';
+type Step = 'LANDING' | 'ONBOARDING' | 'UPLOAD' | 'ATS_CHECK' | 'SESSION' | 'REPORT';
 
 interface UserData {
   name: string;
@@ -25,7 +26,7 @@ interface ResumeData {
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function App() {
-  const [step, setStep] = useState<Step>('ONBOARDING');
+  const [step, setStep] = useState<Step>('LANDING');
   const [userData, setUserData] = useState<UserData | null>(null);
   const [token, setToken] = useState<string>('');
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
@@ -75,19 +76,27 @@ function App() {
   };
 
   const handleRestart = () => {
-    setStep('ONBOARDING');
+    setStep('LANDING');
     setUserData(null);
     setToken('');
     setResumeData(null);
     setSessionId('');
   };
 
+  // Landing page has its own full-screen layout
+  if (step === 'LANDING') {
+    return <LandingPage onGetStarted={() => setStep('ONBOARDING')} />;
+  }
+
   return (
     <div className="bg-glow-radial min-h-screen text-slate-800 flex flex-col justify-between selection:bg-brand-500/10 selection:text-brand-700">
       {/* Navbar */}
       <header className="border-b border-slate-100 bg-white/75 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
+          <button
+            onClick={handleRestart}
+            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+          >
             <div className="bg-gradient-to-tr from-brand-600 to-indigo-500 p-2 rounded-xl text-white shadow-lg shadow-brand-500/20">
               <GraduationCap size={22} />
             </div>
@@ -97,7 +106,7 @@ function App() {
               </span>
               <p className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Interview sandbox</p>
             </div>
-          </div>
+          </button>
 
           <div className="flex items-center gap-4 text-xs font-semibold text-slate-500">
             {userData && (
@@ -166,7 +175,7 @@ function App() {
 
       {/* Footer */}
       <footer className="border-t border-slate-100 bg-white/40 py-6 text-center text-xs text-slate-500">
-        <p>© 2026 PrepMate AI. Highly Tailored Mock Interview Simulator. Built with React + FastAPI + Gemini.</p>
+        <p>© 2026 PrepMate AI. Highly Tailored Mock Interview Simulator. Built with React + Node.js + Gemini.</p>
       </footer>
     </div>
   );
